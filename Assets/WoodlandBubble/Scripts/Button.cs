@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using UnityStandardAssets.Network;
 public class Button : MonoBehaviour
 {
 
@@ -88,11 +90,17 @@ public class Button : MonoBehaviour
 	void offBlock(){
 		InitScript.ShowedHardAd = true;
 	}
-	
-	public void OnPress ( bool isDown){
+	public void OnMouseDown()
+    {
+        Debug.Log("Mouse down");
+        OnPress(true);
+    }
+	public void OnPress ( bool isDown)
+    {
 		if(!isDown){
 
-			if(!InitScript.ShowedHardAd && transform.parent.name == "GameOver" && (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer || Application.platform== RuntimePlatform.WP8Player)){
+			if(!InitScript.ShowedHardAd && transform.parent.name == "GameOver" && (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer || Application.platform== RuntimePlatform.WP8Player))
+            {
 				Invoke("offBlock",3);
 				return;
 			}
@@ -100,20 +108,36 @@ public class Button : MonoBehaviour
 
 			SoundBase.Instance.GetComponent<AudioSource>().PlayOneShot(SoundBase.Instance.click);
 
-			if(name == "PauseButton"){
-				if(GamePlay.gameStatus != GameState.Pause && GamePlay.gameStatus != GameState.GameOver ){
-					GamePlay.ControlAllowed = false;
-					mainscript.StopControl = true;
-					GamePlay.gameStatus = GameState.Pause;
-				}
-				else if(GamePlay.gameStatus == GameState.Pause){
-					//BalloonControl.Instance.ChangeSkin(PlayerPrefs.GetInt("ActiveSkin"));
-					GamePlay.gameStatus = GameState.Playing;
-					mainscript.Instance.CheckBoosts();
-					Invoke("returnControl", 0.5f);
-				}
+            if (name == "PauseButton")
+            {
+                if (GamePlay.gameStatus != GameState.Pause && GamePlay.gameStatus != GameState.GameOver)
+                {
+                    GamePlay.ControlAllowed = false;
+                    mainscript.StopControl = true;
+                    GamePlay.gameStatus = GameState.Pause;
+                }
+            }
+            else if (name == "QuitButton")
+            {
+                if (PlayerInstance.LocalPlayer.isServer)
+                { 
+                    foreach (PlayerInstance _player in  PlayerInstance._otherPlayers)
+                    {
+                        _player.RpcGameOver();
+                    }
+                    NetworkServer.Shutdown();
+                }
+                
+            }
+            else if (GamePlay.gameStatus == GameState.Pause)
+            {
+                //BalloonControl.Instance.ChangeSkin(PlayerPrefs.GetInt("ActiveSkin"));
+                GamePlay.gameStatus = GameState.Playing;
+                mainscript.Instance.CheckBoosts();
+                Invoke("returnControl", 0.5f);
 			}
-			if(name == "Play"){
+			if(name == "Play")
+            {
 				Application.LoadLevel("game");
 			}
             if (name == "TutorialButton")

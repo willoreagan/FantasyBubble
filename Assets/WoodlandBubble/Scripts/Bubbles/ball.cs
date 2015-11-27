@@ -704,15 +704,19 @@ public class ball : MonoBehaviour {
             //    yield return new WaitForSeconds(speed);
         }
 		if(name.IndexOf("bug")<0)
-        { 
-            if (scoreCounter > 50)
+        {
+            if (scoreCounter > 30)
             {
-                PlayerInstance.LocalPlayer.sendCluster();
+                int numRows = 1;
+                if (scoreCounter > 80)
+                    numRows++;
+                if (scoreCounter > 150)
+                    numRows++;
+                if (scoreCounter > 250)
+                    numRows++;
+                PlayerInstance.LocalPlayer.sendCluster(numRows);
             }
-            else
-            { 
-                mainscript.Instance.PopupScore(scoreCounter, transform.position);
-            }
+            mainscript.Instance.PopupScore(scoreCounter, transform.position);
             yield return new WaitForSeconds(speed);
 
 

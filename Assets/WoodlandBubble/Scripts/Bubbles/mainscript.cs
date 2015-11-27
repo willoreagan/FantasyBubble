@@ -38,14 +38,14 @@ public class mainscript : MonoBehaviour {
 	public static int score;
 	public static int stage = 1;
 	const int STAGE_1 = 0;
-	const int STAGE_2 = 300;
-	const int STAGE_3 = 750;
-	const int STAGE_4 = 1400;
-	const int STAGE_5 = 2850;
-	const int STAGE_6 = 4100;
-	const int STAGE_7 = 5500;
-	const int STAGE_8 = 6900;
-	const int STAGE_9 = 8500;
+	const int STAGE_2 = 1;
+	const int STAGE_3 = 75000000;
+	const int STAGE_4 = 14000000;
+	const int STAGE_5 = 28500000;
+	const int STAGE_6 = 41000000;
+	const int STAGE_7 = 55000000;
+	const int STAGE_8 = 69000000;
+	const int STAGE_9 = 85000000;
 	public int arraycounter = 0;
 	public ArrayList controlArray = new ArrayList();
 	bool destringAloneBall;
@@ -88,6 +88,8 @@ public class mainscript : MonoBehaviour {
     public GameObject popupScore;
     public bool startCheckForDropDown;
     public Transform targetSquare;
+
+    public int createRow = 0;
 //	public int[][] meshMatrix = new int[15][17];
 	// Use this for initialization
 	
@@ -97,6 +99,7 @@ public class mainscript : MonoBehaviour {
 		stage = 1;
 		mainscript.StopControl = false;
 		arcadeMode = InitScript.Arcade;
+        
 		if(Application.platform == RuntimePlatform.WindowsEditor){
 			//SwitchLianaBoost();
 			//arcadeMode = true;
@@ -234,11 +237,33 @@ public class mainscript : MonoBehaviour {
                 Invoke("destroyAloneBall", 0.5f);
                 if (!arcadeMode)
                 {
+                    /*
                     if (bounceCounter >= missCount)
                     {
                         bounceCounter = 0;
                         dropDownTime = Time.time + 0.5f;
                         Invoke("dropDown", 0.1f);
+                    }
+                    */
+                    if (createRow > 0)
+                    {
+                        dropDownTime = Time.time + 0.5f;
+                       
+                        Invoke("dropDown", 0.1f);
+                         
+                        createRow--;
+                        if (createRow >= 2)
+                        {
+                            PlayerState.instance.setDizzy();
+                        }
+                        else if (createRow == 1)
+                        {
+                            PlayerState.instance.setHurt(); 
+                        }
+                        else
+                        {
+                            PlayerState.instance.setIdle();
+                        }
                     }
                     else
                     {
@@ -388,9 +413,10 @@ public class mainscript : MonoBehaviour {
 		}
 		GameObject gm = GameObject.Find ("Creator");
 		gm.GetComponent<creatorBall>().createRow(0);
-	//	Invoke("destroyAloneBall", 1f);
-	//	destroyAloneBall();
-	}
+        GameObject.Find("Incoming Lines").GetComponent<Text>().text = "Incoming Lines: " + mainscript.Instance.createRow;
+        //	Invoke("destroyAloneBall", 1f);
+        //	destroyAloneBall();
+    }
 	
 	public void explode(GameObject gameObject){
 		//gameObject.GetComponent<Detonator>().Explode();
