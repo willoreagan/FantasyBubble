@@ -65,6 +65,19 @@ public class PlayerInstance : NetworkBehaviour
         Debug.Log("Recieved cluster");
         target *= 100;
         mainscript.Instance.createRow += num;
+        int createRow = mainscript.Instance.createRow;
+        if (createRow >= 2)
+        {
+            PlayerState.instance.setDizzy();
+        }
+        else if (createRow == 1)
+        {
+            PlayerState.instance.setHurt();
+        }
+        else
+        {
+            PlayerState.instance.setIdle();
+        }
         GameObject.Find("Incoming Lines").GetComponent<Text>().text = "Incoming Lines: " + mainscript.Instance.createRow;
         int numRows = 10000 * num;
 

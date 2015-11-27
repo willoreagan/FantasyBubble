@@ -258,7 +258,7 @@ public class mainscript : MonoBehaviour {
                         }
                         else if (createRow == 1)
                         {
-                            PlayerState.instance.setHurt(); 
+                            PlayerState.instance.setHurt();
                         }
                         else
                         {
@@ -432,39 +432,36 @@ public class mainscript : MonoBehaviour {
 		Invoke("destroyAloneBall", 0.5f);
 	}
 	
-	public void destroyAloneBall(){
+	public void destroyAloneBall()
+    {
 		int i;
-	//	while(true){
-			connectNearBallsGlobal();
-			i=0;
-			destringAloneBall = true;
-			Camera.main.GetComponent<mainscript>().arraycounter = 0;
-			GameObject[] fixedBalls = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];			// detect alone balls
-			Camera.main.GetComponent<mainscript>().controlArray.Clear();
-			foreach(GameObject obj in fixedBalls) {
-				if(obj!=null){
-					if(obj.layer == 9){ 
-						if(!findInArray(Camera.main.GetComponent<mainscript>().controlArray, obj.gameObject) && !obj.GetComponent<ball>().destroyed){
-							if(obj.GetComponent<ball>().nearBalls.Count<7 && obj.GetComponent<ball>().nearBalls.Count>0){
-												i++;
-							//	if(i>5){ i = 0; yield return new WaitForSeconds(0.5f); yield return new WaitForSeconds(0.5f);}
-						//		if(dropingDown) yield return new WaitForSeconds(1f);
-								ArrayList b = new ArrayList();
-								obj.GetComponent<ball>().checkNearestBall(b);
-								if(b.Count >0 ){
-									destroy (b);
-								}
+		connectNearBallsGlobal();
+		i=0;
+		destringAloneBall = true;
+		Camera.main.GetComponent<mainscript>().arraycounter = 0;
+		GameObject[] fixedBalls = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];			// detect alone balls
+		Camera.main.GetComponent<mainscript>().controlArray.Clear();
+		foreach(GameObject obj in fixedBalls) {
+			if(obj!=null){
+				if(obj.layer == 9){ 
+					if(!findInArray(Camera.main.GetComponent<mainscript>().controlArray, obj.gameObject) && !obj.GetComponent<ball>().destroyed){
+						if(obj.GetComponent<ball>().nearBalls.Count<7 && obj.GetComponent<ball>().nearBalls.Count>0){
+											i++;
+						//	if(i>5){ i = 0; yield return new WaitForSeconds(0.5f); yield return new WaitForSeconds(0.5f);}
+					//		if(dropingDown) yield return new WaitForSeconds(1f);
+							ArrayList b = new ArrayList();
+							obj.GetComponent<ball>().checkNearestBall(b);
+							if(b.Count >0 ){
+								destroy (b);
 							}
 						}
-					}	
-				}
+					}
+				}	
 			}
-			destringAloneBall = false;
+		}
+		destringAloneBall = false;
 		StartCoroutine(getBallsForMesh());
 		dropingDown = false;
-		//	Debug.Log(i);
-	//		yield return new WaitForSeconds(2f);
-	//	}
 	}
 
 	public bool findInArray(ArrayList b, GameObject destObj){
