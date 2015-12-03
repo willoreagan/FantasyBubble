@@ -41,7 +41,11 @@ namespace UnityStandardAssets.Network
         {
 
             if (s_Singleton != null)
-                Destroy(s_Singleton);
+			{
+				Debug.Log("destroyed lobby manager");
+				Destroy(s_Singleton);
+			}
+                
 
         }
 

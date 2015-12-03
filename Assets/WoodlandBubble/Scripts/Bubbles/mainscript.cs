@@ -38,7 +38,7 @@ public class mainscript : MonoBehaviour {
 	public static int score;
 	public static int stage = 1;
 	const int STAGE_1 = 0;
-	const int STAGE_2 = 1;
+	const int STAGE_2 = 50;
 	const int STAGE_3 = 75000000;
 	const int STAGE_4 = 14000000;
 	const int STAGE_5 = 28500000;

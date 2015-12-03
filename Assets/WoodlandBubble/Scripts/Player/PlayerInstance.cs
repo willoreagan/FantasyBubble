@@ -17,7 +17,7 @@ public class PlayerInstance : NetworkBehaviour
         if (isLocalPlayer)
         {
             LocalPlayer = this;
-
+			Debug.Log("local player created");
         }
         else
         {
@@ -40,16 +40,29 @@ public class PlayerInstance : NetworkBehaviour
     [Command]
     public void CmdSendCluster(uint networkId, int num)
     {
+		Debug.Log("CmdSendCluster initiated");
        
        foreach(PlayerInstance player in _otherPlayers)
         {
             if (player.GetComponent<NetworkIdentity>().netId.Value == networkId)
-                continue;
+			{
+				Debug.Log("!CmdSendCluster: " + networkId.ToString());
+				continue;
+			}
+                
             else
-                player.RpcRecieveCluster((int)networkId, num);
+			{
+				Debug.Log("CmdSendCluster: " + networkId.ToString());
+				player.RpcRecieveCluster((int)networkId, num);
+			}
+               
         }
         if (LocalPlayer.GetComponent<NetworkIdentity>().netId.Value != networkId)
-            LocalPlayer.RpcRecieveCluster((int)networkId, num);
+		{
+			Debug.Log("LocalPlayer CmdSendCluster: " + networkId.ToString());
+			LocalPlayer.RpcRecieveCluster((int)networkId, num);
+		}
+            
     }
 
     public void sendCluster(int num)
@@ -61,7 +74,12 @@ public class PlayerInstance : NetworkBehaviour
     [ClientRpc]
     public void RpcRecieveCluster(int target, int num)
     {
-        if (!isLocalPlayer) return;
+        if (!isLocalPlayer)
+		{
+			Debug.Log("RpcReceiveCluster returned is not local player");
+			return;
+		}
+			
         Debug.Log("Recieved cluster");
         target *= 100;
         mainscript.Instance.createRow += num;

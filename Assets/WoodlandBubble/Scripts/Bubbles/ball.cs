@@ -714,7 +714,11 @@ public class ball : MonoBehaviour {
                     numRows++;
                 if (scoreCounter > 250)
                     numRows++;
-                PlayerInstance.LocalPlayer.sendCluster(numRows);
+				if(PlayerInstance.LocalPlayer != null)
+				{
+					PlayerInstance.LocalPlayer.sendCluster(numRows);
+				}
+                
             }
             mainscript.Instance.PopupScore(scoreCounter, transform.position);
             yield return new WaitForSeconds(speed);

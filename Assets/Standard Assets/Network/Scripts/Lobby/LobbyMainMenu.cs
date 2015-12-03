@@ -14,6 +14,7 @@ namespace UnityStandardAssets.Network
 
         public InputField ipInput;
         public InputField matchNameInput;
+
       
 
         public void OnEnable()

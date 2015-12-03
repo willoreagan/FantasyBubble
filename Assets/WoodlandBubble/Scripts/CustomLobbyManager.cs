@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 public class CustomLobbyManager : NetworkLobbyManager
 {
-    public CustomLobbyManager():base()
+	public CustomLobbyManager():base()
     { 
         
         if (singleton != null)
