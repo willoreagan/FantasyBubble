@@ -8,7 +8,8 @@ public enum GameState
 	GameOver,
 	Pause,
 	WaitForPopup,
-	BlockedGame
+	BlockedGame,
+	RoundOver
 }
 
 public class GamePlay : MonoBehaviour {
@@ -17,6 +18,7 @@ public class GamePlay : MonoBehaviour {
 	bool gameOverShow;
 	public static GameState gameStatus;
 	public GameObject gameOverMenu;
+	public GameObject RoundOverMenu;
 	public GameObject highScorePopup;
 	public GameObject backHide;
 	public GameObject pauseText;
@@ -32,6 +34,7 @@ public class GamePlay : MonoBehaviour {
 	public float NextStageDistance = 1000;
 
 	static float AdTimer;
+	private bool roundOverShow =false;
 
 	void Awake(){
 		//		Application.targetFrameRate = 60;
@@ -87,6 +90,15 @@ public class GamePlay : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(gameStatus == GameState.RoundOver)
+		{
+			if(!roundOverShow)
+			{
+				roundOverShow = true;
+				this.RoundOverMenu.SetActive(true);
+			}
+				
+		}
         if (Input.GetKeyDown(KeyCode.L)) gameStatus = GameState.GameOver;
 		if(gameStatus == GameState.BlockedGame) return;
 		if(gameStatus == GameState.Pause){ Time.timeScale = 0; ControlAllowed = false;}
@@ -99,7 +111,12 @@ public class GamePlay : MonoBehaviour {
 		if(gameStatus == GameState.Highscore && !highScoreShow){
 			highScoreShow = true;
 		//	highScorePopup.SetActive(true);
-            gameStatus = GameState.GameOver;
+			if(Camera.main.GetComponent<mainscript>().gameOver)
+			{
+				gameStatus = GameState.GameOver;
+			}
+			else
+				gameStatus = GameState.RoundOver;
 		//	backHide.SetActive(true);
 		}
 		if(gameStatus == GameState.GameOver && !gameOverShow){
@@ -155,6 +172,25 @@ public class GamePlay : MonoBehaviour {
 			mainscript.Instance.CheckBoosts();
 		}
 		
+	}
+
+	public void ShowRoundOver(){
+		mainscript.Instance.CheckBoosts();
+		string high = "highscore";
+		if(InitScript.Arcade) high = "highscoreArcade";
+		if(Score.score > PlayerPrefs.GetFloat(high)){
+			PlayerPrefs.SetFloat(high, Score.score);
+			PlayerPrefs.Save();
+			GamePlay.gameStatus = GameState.Highscore;
+			InitScript.Inctance.UpdateScores();
+
+
+		}
+		else{
+			GamePlay.gameStatus = GameState.RoundOver;
+			mainscript.Instance.CheckBoosts();
+		}
+
 	}
 
 

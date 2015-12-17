@@ -109,6 +109,24 @@ public class PlayerInstance : NetworkBehaviour
         GamePlay.gameStatus = GameState.GameOver;
     }
 
+	[ClientRpc]
+	public void RpcRoundOver()
+	{
+		LobbyManager.s_Singleton.StopClient();
+		GamePlay.gameStatus = GameState.RoundOver;
+	}
+
+	[ClientRpc]
+	public void RpcUpdateTime(int time)
+	{
+		GameObject timer = GameObject.Find("TimeRemaining");
+		if(timer != null)
+		{
+			timer.GetComponent<Text>().text = time.ToString();
+		}
+
+	}
+
     public void PopupText(string value, Vector3 pos)
     {
         pos += Vector3.right * 0.5f;

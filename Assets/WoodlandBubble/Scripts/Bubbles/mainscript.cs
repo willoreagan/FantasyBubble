@@ -77,6 +77,7 @@ public class mainscript : MonoBehaviour {
 	public static bool ElectricBoost;
 	bool BonusLianaCounter;
 	bool gameOverShown;
+	bool roundOverShown;
 	public static bool StopControl;
 	public GameObject finger;
 
@@ -90,6 +91,7 @@ public class mainscript : MonoBehaviour {
     public Transform targetSquare;
 
     public int createRow = 0;
+	public bool roundOver = false;
 //	public int[][] meshMatrix = new int[15][17];
 	// Use this for initialization
 	
@@ -136,7 +138,14 @@ public class mainscript : MonoBehaviour {
 			InitScript.Changing = false;
 
 		}
+		if(GamePlay.gameStatus == GameState.RoundOver){
+			InitScript.Cherry = false;
+			InitScript.Electric = false;
+			InitScript.Changing = false;
+
+		}
 	}
+
 
 	public void SwitchLianaBoost(){
 		if(!ElectricBoost){
@@ -183,10 +192,14 @@ public class mainscript : MonoBehaviour {
 ////			GameObject.Find("PauseButton").GetComponent<clickButton>().OnMouseDown();
 //		}
 
-
+		if(roundOver && !roundOverShown)
+		{
+			roundOverShown = true;
+			GamePlay.Instance.ShowRoundOver();
+		}
 		if(gameOver && !gameOverShown){
 			gameOverShown = true;
-			GamePlay.Instance.ShowGameOver();
+			GamePlay.Instance.ShowGameOver();	
 			
 			return;
 		}
